@@ -7,6 +7,7 @@ createPlayer(input: {
     firstName: $firstName,
     lastName: $lastName
     }) {
+    _typename
     id
     firstName
     lastName

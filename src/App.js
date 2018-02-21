@@ -52,6 +52,7 @@ const client = new AWSAppSyncClient({
       // type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,
       // jwtToken: async () => (await Auth.currentSession()).getIdToken().getJwtToken(),
   },
+  disableOffline: false
 });
 
 
@@ -60,6 +61,10 @@ const AllPlayersWithData = compose(
       options: {
           fetchPolicy: 'cache-and-network'
       },
+      // onAdd: post => this.props.mutate({
+      //   variables: post,
+      //   optimisticResponse: () => ({ createPlayer: { __typename: 'Player', ups: 1, downs: 1, content: '', url: '', version: 1, ...post } }),
+      // }),
       props: (props) => ({
         // posts: props.data.allPost && props.data.allPost.posts,
         players: props.data.listPlayers && props.data.listPlayers.items,
@@ -67,13 +72,12 @@ const AllPlayersWithData = compose(
         subscribeToNewPosts: params => {
             props.data.subscribeToMore({
                 document: NewPlayerSub,
-                updateQuery: (prev, { subscriptionData: { data : { newPlayer } } }) => ({
-                    ...prev,
-                    listPlayers: {
-                      // items: [newPlayer, ...prev.listPlayers.items.filter(post => newPlayer && post.id !== newPlayer.id)], __typename: 'PlayerConnection' 
-                      items: [newPlayer, ...prev.listPlayers.items]
-                      }
-                })
+                updateQuery: (prev, { subscriptionData: { data : { onCreatePlayer } } }) => ({
+                      ...prev,
+                      listPlayers: {
+                          items: [onCreatePlayer, ...prev.listPlayers.items.filter(post => onCreatePlayer && post.id !== onCreatePlayer.id)], __typename: 'PlayerConnection' 
+                        }
+                  })
             });
         },
         // END - NEW PROP
