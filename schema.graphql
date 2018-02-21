@@ -1,0 +1,210 @@
+﻿type Match {
+  datePlayed: String!
+  id: ID!
+  matchDetails: [MatchDetail]
+  teamA: Team
+  teamB: Team
+}
+
+type MatchConnection {
+  items: [Match]
+  nextToken: String
+}
+
+type MatchDetail {
+  ball: Int!
+  batsman: Player!
+  bowler: Player!
+  five: Boolean
+  four: Boolean
+  id: ID!
+  legBy: Boolean
+  nb: Boolean
+  one: Boolean
+  over: Int!
+  six: Boolean
+  three: Boolean
+  two: Boolean
+  wicket: Wicket
+  wide: Boolean
+}
+
+type MatchDetailConnection {
+  items: [MatchDetail]
+  nextToken: String
+}
+
+type Mutation {
+  createMatch(input: CreateMatchInput!): Match
+  createMatchDetail(input: CreateMatchDetailInput!): MatchDetail
+  createPlayer(input: CreatePlayerInput!): Player
+  createTeam(input: CreateTeamInput!): Team
+  deleteMatch(input: DeleteMatchInput!): Match
+  deleteMatchDetail(input: DeleteMatchDetailInput!): MatchDetail
+  deletePlayer(input: DeletePlayerInput!): Player
+  deleteTeam(input: DeleteTeamInput!): Team
+  updateMatch(input: UpdateMatchInput!): Match
+  updateMatchDetail(input: UpdateMatchDetailInput!): MatchDetail
+  updatePlayer(input: UpdatePlayerInput!): Player
+  updateTeam(input: UpdateTeamInput!): Team
+}
+
+type Player {
+  dob: String
+  firstName: String!
+  id: ID!
+  lastName: String!
+  phone: String
+  sex: String
+  teams: [Team]
+}
+
+type PlayerConnection {
+  items: [Player]
+  nextToken: String
+}
+
+type Query {
+  getMatch(datePlayed: String!, id: ID!): Match
+  getMatchDetail(id: ID!): MatchDetail
+  getPlayer(firstName: String!, id: ID!): Player
+  getTeam(id: ID!, name: String!): Team
+  listMatchDetails(after: String, first: Int): MatchDetailConnection
+  listMatches(after: String, first: Int): MatchConnection
+  listPlayers(after: String, first: Int): PlayerConnection
+  listTeams(after: String, first: Int): TeamConnection
+}
+
+type Subscription {
+  onCreateMatch(datePlayed: String, id: ID): Match
+    @aws_subscribe(mutations:["createMatch"])
+  onCreateMatchDetail(ball: Int, id: ID, one: Boolean, over: Int, two: Boolean): MatchDetail
+    @aws_subscribe(mutations:["createMatchDetail"])
+  onCreatePlayer(dob: String, firstName: String, id: ID, lastName: String, phone: String): Player
+    @aws_subscribe(mutations:["createPlayer"])
+  onCreateTeam(id: ID, name: String): Team
+    @aws_subscribe(mutations:["createTeam"])
+  onDeleteMatch(datePlayed: String, id: ID): Match
+    @aws_subscribe(mutations:["deleteMatch"])
+  onDeleteMatchDetail(ball: Int, id: ID, one: Boolean, over: Int, two: Boolean): MatchDetail
+    @aws_subscribe(mutations:["deleteMatchDetail"])
+  onDeletePlayer(dob: String, firstName: String, id: ID, lastName: String, phone: String): Player
+    @aws_subscribe(mutations:["deletePlayer"])
+  onDeleteTeam(id: ID, name: String): Team
+    @aws_subscribe(mutations:["deleteTeam"])
+  onUpdateMatch(datePlayed: String, id: ID): Match
+    @aws_subscribe(mutations:["updateMatch"])
+  onUpdateMatchDetail(ball: Int, id: ID, one: Boolean, over: Int, two: Boolean): MatchDetail
+    @aws_subscribe(mutations:["updateMatchDetail"])
+  onUpdatePlayer(dob: String, firstName: String, id: ID, lastName: String, phone: String): Player
+    @aws_subscribe(mutations:["updatePlayer"])
+  onUpdateTeam(id: ID, name: String): Team
+    @aws_subscribe(mutations:["updateTeam"])
+}
+
+type Team {
+  id: ID!
+  name: String!
+  players: [Player]
+}
+
+type TeamConnection {
+  items: [Team]
+  nextToken: String
+}
+
+enum Wicket {
+  BOWLED
+  CAUGHT
+  CAUGHT_BEHIND
+  HIT_WICKET
+  LEG_BEFORE_WICKET
+  RUN_OUT
+}
+
+input CreateMatchDetailInput {
+  ball: Int!
+  five: Boolean
+  four: Boolean
+  id: ID!
+  legBy: Boolean
+  nb: Boolean
+  one: Boolean
+  over: Int!
+  six: Boolean
+  three: Boolean
+  two: Boolean
+  wide: Boolean
+}
+
+input CreateMatchInput {
+  datePlayed: String!
+  id: ID!
+}
+
+input CreatePlayerInput {
+  dob: String
+  firstName: String!
+  id: ID!
+  lastName: String!
+  phone: String
+  sex: String
+}
+
+input CreateTeamInput {
+  id: ID!
+  name: String!
+}
+
+input DeleteMatchDetailInput {
+  id: ID!
+}
+
+input DeleteMatchInput {
+  datePlayed: String!
+  id: ID!
+}
+
+input DeletePlayerInput {
+  firstName: String!
+  id: ID!
+}
+
+input DeleteTeamInput {
+  id: ID!
+  name: String!
+}
+
+input UpdateMatchDetailInput {
+  ball: Int
+  five: Boolean
+  four: Boolean
+  id: ID!
+  legBy: Boolean
+  nb: Boolean
+  one: Boolean
+  over: Int
+  six: Boolean
+  three: Boolean
+  two: Boolean
+  wide: Boolean
+}
+
+input UpdateMatchInput {
+  datePlayed: String!
+  id: ID!
+}
+
+input UpdatePlayerInput {
+  dob: String
+  firstName: String!
+  id: ID!
+  lastName: String
+  phone: String
+  sex: String
+}
+
+input UpdateTeamInput {
+  id: ID!
+  name: String!
+}
